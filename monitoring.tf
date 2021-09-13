@@ -163,6 +163,16 @@ resource "azurerm_monitor_diagnostic_setting" "aa_diags_metrics" {
   }
 }
 
+resource "azurerm_log_analytics_datasource_windows_performance_counter" "win_perf_counters" {
+  name                = "la-wpc"
+  resource_group_name = var.rg-name
+  workspace_name      = azurerm_log_analytics_workspace.la.name
+  object_name         = "CPU"
+  instance_name       = "*"
+  counter_name        = "CPU"
+  interval_seconds    = 10
+}
+
 resource "azurerm_virtual_machine_extension" "mma_win" {
   count                      = var.vmcount
   name                       = "OMSExtension"
