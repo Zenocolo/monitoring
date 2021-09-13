@@ -166,7 +166,7 @@ resource "azurerm_monitor_diagnostic_setting" "aa_diags_metrics" {
 resource "azurerm_virtual_machine_extension" "mma_win" {
   count                      = 2
   name                       = "OMSExtension"
-  virtual_machine_id         = element(module.vm.virtual_machine_ids, count.index)
+  virtual_machine_id         = element(var.virtual_machine_ids, count.index)
   publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
   type                       = "MicrosoftMonitoringAgent"
   type_handler_version       = "1.0"
