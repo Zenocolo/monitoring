@@ -8,7 +8,7 @@ resource "random_string" "rand" {
 
 # Locals
 locals {
-  prefix            = "eu"
+  prefix = "eu"
   tags = {
     environment = local.prefix
   }
@@ -17,8 +17,8 @@ locals {
 # Storage Account
 resource "azurerm_storage_account" "sa" {
   name                     = "sa${local.prefix}${random_string.rand.result}"
-  location             = var.location
-  resource_group_name  = var.rg-name
+  location                 = var.location
+  resource_group_name      = var.rg-name
   account_tier             = "Standard"
   account_replication_type = "LRS"
   tags                     = local.tags
@@ -27,8 +27,8 @@ resource "azurerm_storage_account" "sa" {
 # Automation Account (patch management)
 resource "azurerm_automation_account" "aa" {
   name                = "aa-${local.prefix}-${random_string.rand.result}"
-  location             = var.location
-  resource_group_name  = var.rg-name
+  location            = var.location
+  resource_group_name = var.rg-name
   sku_name            = "Basic"
   tags                = local.tags
 }
@@ -36,21 +36,21 @@ resource "azurerm_automation_account" "aa" {
 # Log Analytics Account (monitoring)
 resource "azurerm_log_analytics_workspace" "la" {
   name                = "la-${local.prefix}-${random_string.rand.result}"
-  location             = var.location
-  resource_group_name  = var.rg-name
-  sku                 = "PerGBf2018"
+  location            = var.location
+  resource_group_name = var.rg-name
+  sku                 = "PerGB2018"
   retention_in_days   = 30
 }
 
 resource "azurerm_log_analytics_linked_service" "aa-la-link" {
-  resource_group_name  = var.rg-name
+  resource_group_name = var.rg-name
   workspace_id        = azurerm_log_analytics_workspace.la.id
   read_access_id      = azurerm_automation_account.aa.id
 }
 
 resource "azurerm_log_analytics_solution" "la_solution_updates" {
-  location             = var.location
-  resource_group_name  = var.rg-name
+  location            = var.location
+  resource_group_name = var.rg-name
 
   solution_name         = "Updates"
   workspace_resource_id = azurerm_log_analytics_workspace.la.id
@@ -64,8 +64,8 @@ resource "azurerm_log_analytics_solution" "la_solution_updates" {
 
 resource "azurerm_log_analytics_solution" "changeTrackingSolution" {
   solution_name         = "ChangeTracking"
-  location             = var.location
-  resource_group_name  = var.rg-name
+  location              = var.location
+  resource_group_name   = var.rg-name
   workspace_resource_id = azurerm_log_analytics_workspace.la.id
   workspace_name        = azurerm_log_analytics_workspace.la.name
 
