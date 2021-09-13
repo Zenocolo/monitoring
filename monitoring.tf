@@ -38,7 +38,7 @@ resource "azurerm_log_analytics_workspace" "la" {
   name                = "la-${local.prefix}-${random_string.rand.result}"
   location             = var.location
   resource_group_name  = var.rg-name
-  sku                 = "PerGB2018"
+  sku                 = "PerGBf2018"
   retention_in_days   = 30
 }
 
@@ -164,7 +164,7 @@ resource "azurerm_monitor_diagnostic_setting" "aa_diags_metrics" {
 }
 
 resource "azurerm_virtual_machine_extension" "mma_win" {
-  count                      = 2
+  count                      = var.vmcount
   name                       = "OMSExtension"
   virtual_machine_id         = element(var.virtual_machine_ids, count.index)
   publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
