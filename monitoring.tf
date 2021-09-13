@@ -49,8 +49,8 @@ resource "azurerm_log_analytics_linked_service" "aa-la-link" {
 }
 
 resource "azurerm_log_analytics_solution" "la_solution_updates" {
-  resource_group_name = data.azurerm_resource_group.project.name
-  location            = data.azurerm_resource_group.project.location
+  location             = var.location
+  resource_group_name  = var.rg-name
 
   solution_name         = "Updates"
   workspace_resource_id = azurerm_log_analytics_workspace.la.id
@@ -64,8 +64,8 @@ resource "azurerm_log_analytics_solution" "la_solution_updates" {
 
 resource "azurerm_log_analytics_solution" "changeTrackingSolution" {
   solution_name         = "ChangeTracking"
-  resource_group_name   = data.azurerm_resource_group.project.name
-  location              = data.azurerm_resource_group.project.location
+  location             = var.location
+  resource_group_name  = var.rg-name
   workspace_resource_id = azurerm_log_analytics_workspace.la.id
   workspace_name        = azurerm_log_analytics_workspace.la.name
 
